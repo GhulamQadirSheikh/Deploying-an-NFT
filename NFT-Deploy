@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.12;
+
+
+import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/token/ERC721/SafeERC721.sol";
+
+// define the contract name and symbol
+
+
+// define the contract as a safe ERC-721 token
+// using the SafeERC721 contract from OpenZeppelin
+contract MyNFT is SafeERC721 {
+    string public contractName = "My NFT";
+    string public symbol = "NFT";
+    // constructor function to set the name and symbol
+    constructor() public {
+        _name = contractName;
+        _symbol = symbol;
+    }
+
+    // function to mint a new NFT
+    function mint(string memory _uri) public {
+        // generate a new token ID
+        uint256 newTokenId = totalSupply() + 1;
+
+        // mint the new NFT
+        _mint(msg.sender, newTokenId, _uri);
+    }
+    // This contract represents an NFT with ownership transfer functionality
+
+    using SafeMath for uint256;
+
+    constructor() ERC721("MyNFT", "MNFT") public {}
+
+    // Transfer ownership of an NFT to a new owner
+    function transferFrom(address from, address to, uint256 tokenId) public {
+        // Ensure that the caller is the owner of the NFT
+        require(ownerOf(tokenId) == from, "You are not the owner of this NFT");
+
+        // Transfer ownership to the new owner
+        super._transferFrom(from, to, tokenId);
+    }
+
+}
